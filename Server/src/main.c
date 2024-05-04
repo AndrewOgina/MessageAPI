@@ -2,10 +2,11 @@
 #define PORT 8888
 
 
-int main()
+int main(int argc,char* argv[])
 {
     int serverFD;
     int clientFD;
+    char* received;
     struct sockaddr_in serverInfo;
     struct sockaddr_in clientInfo;
     socklen_t clientAddrlen;
@@ -18,8 +19,11 @@ int main()
     while(1)
     {
         clientFD = acceptConnections(serverFD,&clientInfo,&clientAddrlen);
-        close(serverFD);
         send(clientFD,"Hello",sizeof("Hello"),0);
+        received = receiveTCP(clientFD);
+        printf("Received: %s", received);
+
     }
+    close(serverFD);
     close(clientFD);
 }
