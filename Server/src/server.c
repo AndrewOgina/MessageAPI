@@ -2,13 +2,13 @@
 
 int getSocket(int serverType)
 {
-    int sockFD = socket(AF_INET, sockType, 0);
-    if (sockFD == -1)
+    int serverFD = socket(AF_INET, serverType, 0);
+    if (serverFD == -1)
     {
         perror("socket: server side!");
         exit(EXIT_FAILURE);
     }
-    return sockFD;
+    return serverFD;
 }
 
 struct sockaddr_in get_sockaddr_in(int port)
@@ -21,31 +21,31 @@ struct sockaddr_in get_sockaddr_in(int port)
     return serverInfo;
 }
 
-void bind_and_listen(int* sockFD,struct sockaddr_in* serverInfo)
+void bind_and_listen(int *serverFD, struct sockaddr_in *serverInfo)
 {
-    if((bind(*sockFD,(SA*)serverInfo,sizeof(*serverInfo)))==-1)
+    if ((bind(*serverFD, (SA *)serverInfo, sizeof(*serverInfo))) == -1)
     {
         perror("bind: server side");
-        close(*sockFD);
+        close(*serverFD);
         exit(EXIT_FAILURE);
     }
 
-    if((listen(*sockFD,10))==-1)
+    if ((listen(*serverFD, 10)) == -1)
     {
         perror("listen: server side");
-        close(*sockFD);
+        close(*serverFD);
         exit(EXIT_FAILURE);
     }
 }
 
-int acceptConnections(int sockFD,struct sockaddr_in* clientInfo,socklen_t* clientAddrlen)
+int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *clientAddrlen)
 {
     char addrinfo[INET_ADDRSTRLEN];
-    int clientFD = accept(sockFD,(SA*)&clientInfo,clientAddrlen);
-    if(clientFD == -1)
+    int clientFD = accept(serverFD, (SA *)&clientInfo, clientAddrlen);
+    if (clientFD == -1)
     {
         perror("accept: server side");
-        close(sockFD);
+        close(serverFD);
         exit(EXIT_FAILURE);
     }
     inet_ntop(AF_INET,&clientInfo,addrinfo,sizeof(addrinfo));
