@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #define SA struct sockaddr
-
+#define MAXLEN 4096
 
 // @warning: All functions work only with ipV4.
 
