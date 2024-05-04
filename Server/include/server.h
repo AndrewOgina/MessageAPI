@@ -33,12 +33,11 @@ int getSocket(int serverType);
 */
 struct sockaddr_in get_sockaddr_in(int port);
 
-
 /**
  * @brief Binds address and listens for connections.
  * 
- * @param sockFD - The socket file descriptor
- * @param servaddr - A pointer to a sockaddr_in struct containing server address info.
+ * @param serverFD - The socket file descriptor
+ * @param serverAddr - A pointer to a sockaddr_in struct containing server address info.
  * 
  * @note Make sure the sockaddr_in struct is filled.
 */
