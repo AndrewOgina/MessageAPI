@@ -1,6 +1,6 @@
 #include "../include/server.h"
 
-int getSocket(int sockType)
+int getSocket(int serverType)
 {
     int sockFD = socket(AF_INET, sockType, 0);
     if (sockFD == -1)
