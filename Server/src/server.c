@@ -14,7 +14,7 @@ int getSocket(int serverType)
 struct sockaddr_in get_sockaddr_in(int port)
 {
     struct sockaddr_in serverInfo;
-    memset(&serverInfo,0,sizeof(serverInfo));
+    memset(&serverInfo, 0, sizeof(serverInfo));
     serverInfo.sin_family = AF_INET;
     serverInfo.sin_addr.s_addr = htonl(INADDR_ANY);
     serverInfo.sin_port = htons(port);
@@ -48,7 +48,7 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *c
         close(serverFD);
         exit(EXIT_FAILURE);
     }
-    inet_ntop(AF_INET,&clientInfo,addrinfo,sizeof(addrinfo));
+    inet_ntop(AF_INET, &clientInfo, addrinfo, sizeof(addrinfo));
 
     return clientFD;
 }
