@@ -19,12 +19,12 @@
  * 
  * @brief Creates a socket and returns the socket file descriptor. Does error handling.
  * 
- * @param sockType - SOCK_STREAM(for TCP) or SOCK_DGRAM(for Datagram).
+ * @param serverType - SOCK_STREAM(for TCP) or SOCK_DGRAM(for Datagram).
  * 
  * @return An integer which is the socket file descriptor.
  * @note Ipv4 only.
 */
-int getSocket(int sockType);
+int getSocket(int serverType);
 
 /**
  * @brief Fills a sockaddr_in  struct and returns it.
@@ -42,13 +42,12 @@ struct sockaddr_in get_sockaddr_in(int port);
  * 
  * @note Make sure the sockaddr_in struct is filled.
 */
-void bind_and_listen(int* sockFD,struct sockaddr_in* servaddr);
-
+void bind_and_listen(int *serverFD, struct sockaddr_in *serverAddr);
 
 /**
  * @brief Accepts incoming request and returns an accept file descriptor.
  *        Also prints out successful connections.
- * @param sockFD -  The socket file descriptor.
+ * @param serverFD -  The socket file descriptor.
  * @param clientAddr - A pointer to a sockaddr_in struct to store client address.
  * @param clientAddrlen - A pointer to a socklen_t instance to store the client;s address length.
  * 
@@ -56,8 +55,7 @@ void bind_and_listen(int* sockFD,struct sockaddr_in* servaddr);
  * 
  * @note Should be called within a loop.
 */
-int acceptConnections(int sockFD,struct sockaddr_in* clientAddr,socklen_t* clientAddren);
-
+int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *clientAddrlen);
 
 /**
  * @brief Sends a message over a TCP server.
