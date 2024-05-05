@@ -69,3 +69,15 @@ char receiveTCP(int clientFD)
     received[msgLen] = '\0';
     return *received;
 }
+
+void sendTCP(int clientFD,char* message)
+{
+    int msgSize = sizeof(message);
+    if((send(clientFD,message,msgSize,0))==-1)
+    {
+        perror("send: server side");
+        close(clientFD);
+        exit(EXIT_FAILURE);
+    }
+}
+
