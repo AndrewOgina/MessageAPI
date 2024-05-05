@@ -6,7 +6,7 @@ int main(int argc,char* argv[])
 {
     int serverFD;
     int clientFD;
-    char* received;
+    char received[MAXLEN];
     struct sockaddr_in serverInfo;
     struct sockaddr_in clientInfo;
     socklen_t clientAddrlen;
@@ -20,8 +20,8 @@ int main(int argc,char* argv[])
     {
         clientFD = acceptConnections(serverFD,&clientInfo,&clientAddrlen);
         send(clientFD,"Hello",sizeof("Hello"),0);
-        received = receiveTCP(clientFD);
-        printf("Received: %s", received);
+        received[0] = receiveTCP(clientFD);
+        fprintf(stdout,"Received: %s\n", received);
 
     }
     close(serverFD);
