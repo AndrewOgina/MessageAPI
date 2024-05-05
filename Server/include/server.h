@@ -68,6 +68,8 @@ void sendTCP(int clientFD,char* message);
  * @param userName - The username of the sender.
  * @return The received message .
  */
-char* receiveTCP(int clientFD);
+char receiveTCP(int clientFD);
+
+
 
 #endif
