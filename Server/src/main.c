@@ -1,5 +1,5 @@
 #include "../include/server.h"
-#define PORT 8888
+#define PORT 8088
 
 
 int main(int argc,char* argv[])
