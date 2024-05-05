@@ -67,5 +67,5 @@ char receiveTCP(int clientFD)
     }
     // null terminating it.
     received[msgLen] = '\0';
-    return received;
+    return *received;
 }
