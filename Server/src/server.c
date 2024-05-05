@@ -53,7 +53,7 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *c
     return clientFD;
 }
 
-char* receiveTCP(int clientFD)
+char receiveTCP(int clientFD)
 {
     char received[MAXLEN];
     int msgLen;
