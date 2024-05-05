@@ -61,7 +61,7 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *c
  * @param userName - The username of  the recipient.
  * @param message - The message to be sent.
  */
-void sendTCP(char userName, char message);
+void sendTCP(int clientFD,char* message);
 
 /**
  * @brief Receives message clients.
