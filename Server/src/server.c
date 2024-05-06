@@ -75,6 +75,11 @@ char* receiveTCP(int clientFD,char* msgBuffer)
     return msgBuffer;
 }
 
+/**
+ * @brief Sends message to a chosen client.
+ * @param userName - The username of  the recipient.
+ * @param message - The message to be sent.
+ */
 void sendTCP(int clientFD,char* message)
 {
     int msgSize = sizeof(message);
