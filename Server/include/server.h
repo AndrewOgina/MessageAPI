@@ -58,16 +58,9 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *c
 
 
 /**
- * @brief Sends message to a chosen client.
- * @param userName - The username of  the recipient.
- * @param message - The message to be sent.
- */
-void sendTCP(int clientFD,char* message);
-
-/**
- * @brief Receives message clients.
- * @param userName - The username of the sender.
- * @return The received message .
+ * @brief Receive data from a TCP server and sends it back to sender
+ * @param clientFD - The client's file descriptor.
+ * @return void.
  */
 char receiveTCP(int clientFD);
 
