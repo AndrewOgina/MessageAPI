@@ -56,6 +56,7 @@ void bind_and_listen(int *serverFD, struct sockaddr_in *serverAddr);
  */
 int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *clientAddrlen);
 
+
 /**
  * @brief Sends message to a chosen client.
  * @param userName - The username of  the recipient.
