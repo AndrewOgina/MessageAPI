@@ -92,3 +92,10 @@ void sendTCP(int clientFD,char* message)
     }
 }
 
+
+void receive_and_send(int clientFD,char* msgBuffer)
+{
+    char* message = receiveTCP(clientFD,msgBuffer);
+    printf("message:::%s",message);
+    sendTCP(clientFD,message);
+}
