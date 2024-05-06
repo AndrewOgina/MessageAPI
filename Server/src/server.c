@@ -82,7 +82,8 @@ char* receiveTCP(int clientFD,char* msgBuffer)
  */
 void sendTCP(int clientFD,char* message)
 {
-    int msgSize = sizeof(message);
+    int msgSize = strlen(message);
+    printf("Message size: %i",msgSize);
     if((send(clientFD,message,msgSize,0))==-1)
     {
         perror("send: server side");
