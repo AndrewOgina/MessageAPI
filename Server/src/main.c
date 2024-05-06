@@ -20,7 +20,7 @@ int main(int argc,char* argv[])
     {
         clientFD = acceptConnections(serverFD,&clientInfo,&clientAddrlen);
         send(clientFD,"Hello",sizeof("Hello"),0);
-
+        
         while(1)
         {
         receive_and_send(clientFD,msgBuffer);
