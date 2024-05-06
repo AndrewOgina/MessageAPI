@@ -20,8 +20,6 @@ int main(int argc,char* argv[])
     {
         clientFD = acceptConnections(serverFD,&clientInfo,&clientAddrlen);
         send(clientFD,"Hello",sizeof("Hello"),0);
-        received[0] = receiveTCP(clientFD);
-        fprintf(stdout,"Received: %s\n", received);
 
     }
     close(serverFD);
