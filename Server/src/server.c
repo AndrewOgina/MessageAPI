@@ -53,21 +53,26 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *c
     return clientFD;
 }
 
-char receiveTCP(int clientFD)
+/**
+ * @brief Receives message clients.
+ * @param userName - The username of the sender.
+ * @param msgBuffer - An array where the received message will be stored.
+ * @return The received message .
+ */
+char* receiveTCP(int clientFD,char* msgBuffer)
 {
-    char received[MAXLEN];
     int msgLen;
     // TODO
     // 10 is a randomly selected number for now...I'll update it.
-    if ((msgLen = recv(clientFD, received, MAXLEN - 10, 0)) == -1)
+    if ((msgLen = recv(clientFD, msgBuffer, MAXLEN - 10, 0)) == -1)
     {
         perror("recv(): server side");
         close(clientFD);
         exit(EXIT_FAILURE);
     }
     // null terminating it.
-    received[msgLen] = '\0';
-    return *received;
+    msgBuffer[msgLen] = '\0';
+    return msgBuffer;
 }
 
 void sendTCP(int clientFD,char* message)
