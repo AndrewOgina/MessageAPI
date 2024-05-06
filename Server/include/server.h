@@ -62,8 +62,6 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *c
  * @param clientFD - The client's file descriptor.
  * @return void.
  */
-char receiveTCP(int clientFD);
-
-
+void receive_and_send(int clientFD,char* msgBuffer);
 
 #endif
