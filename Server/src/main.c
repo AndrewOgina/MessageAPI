@@ -6,7 +6,7 @@ int main(int argc,char* argv[])
 {
     int serverFD;
     int clientFD;
-    char received[MAXLEN];
+    char msgBuffer[MAXLEN];
     struct sockaddr_in serverInfo;
     struct sockaddr_in clientInfo;
     socklen_t clientAddrlen;
