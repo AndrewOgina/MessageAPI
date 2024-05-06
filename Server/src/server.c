@@ -49,7 +49,7 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *c
         exit(EXIT_FAILURE);
     }
     inet_ntop(AF_INET, &clientInfo, addrinfo, sizeof(addrinfo));
-
+    
     return clientFD;
 }
 

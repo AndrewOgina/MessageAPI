@@ -61,7 +61,7 @@ int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *c
  * @brief Receive data from a TCP server and sends it back to sender
  * @param clientFD - The client's file descriptor.
  * @return void.
- */
+*/
 void receive_and_send(int clientFD,char* msgBuffer);
 
 #endif
