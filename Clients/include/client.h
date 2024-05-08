@@ -38,5 +38,20 @@ struct sockaddr_in get_serverAddr(int port,char address);
 */
 void connectTCP(int serverFD,struct sockaddr_in serverAddr);
 
+/**
+ * @brief Sends a message over the server file descriptor.
+ * @param serverFD - The server's file descriptor.
+ * @param message - An array containing the message to be sent.
+ * @return void.
+*/
+void sendTCP(int serverFD,char* message);
+
+/**
+ * @brief Receives a message over from the server.
+ * @param serverFD - The server's file descriptor.
+ * @param msgBuffer - An array buffer where the recieved message will be stored.
+*/
+void receiveTCP(int serverFD,char* msgBuffer);
+
 
 #endif
