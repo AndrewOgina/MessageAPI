@@ -39,5 +39,25 @@ void connectTCP(int serverFD,struct sockaddr_in serverAddr)
     fprintf(stdout,"Connection established successfully!\n");
 }
 
+void sendTCP(int serverFD,char* message)
+{
+    if((send(serverFD,message,strlen(message),0))==-1)
+    {
+        close(serverFD);
+        perror("Send: client side!");
+        exit(EXIT_FAILURE);
+    }
+}
 
+void receiveTCP(int serverFD,char* msgBuffer)
+{
+    int msgLen;
+    if((msgLen = recv(serverFD,msgBuffer,sizeof(msgBuffer),0))==-1)
+    {
+        close(serverFD);
+        perror("recv: client side!");
+        exit(EXIT_FAILURE);
+    }
+    msgBuffer[msgLen] = '\0';
+}
 
