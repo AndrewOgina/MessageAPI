@@ -3,7 +3,7 @@
 int getSocket(int serverType)
 {
     int serverFD;
-    if((serverFD = socket(AF_INET,serverFD,0))==-1)
+    if((serverFD = socket(AF_INET,serverType,0))==-1)
     {
         perror("Socket: client side!");
         exit(EXIT_FAILURE);
