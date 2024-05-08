@@ -8,7 +8,7 @@ int getSocket(int serverType)
         perror("Socket: client side!");
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout,"Socket created succesfully!\n");
+    fprintf(stdout,"Socket created successfully!\n");
     return serverFD;
 }
 
@@ -23,7 +23,7 @@ struct sockaddr_in get_serverAddr(int port,char address)
         perror("inet_pton: Failed to get address!");
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout,"Server address retreived successfully!\n");
+    fprintf(stdout,"Server address retrieved successfully!\n");
     return serverAddr;
 
 }
@@ -36,7 +36,7 @@ void connectTCP(int serverFD,struct sockaddr_in serverAddr)
         close(serverFD);
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout,"Connection established succesfully!\n");
+    fprintf(stdout,"Connection established successfully!\n");
 }
 
 
