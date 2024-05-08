@@ -27,7 +27,7 @@ int getSocket(int serverType);
  * @param port - The port the server runs on.
  * @return A sockaddr_in struct
  */
-struct sockaddr_in get_serverAddr(int port,char address);
+struct sockaddr_in get_serverAddr(int port,char* address);
 
 /**
  * @brief Connects to a TCP server.
