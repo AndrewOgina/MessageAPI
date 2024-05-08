@@ -49,7 +49,7 @@ void sendTCP(int serverFD,char* message);
 /**
  * @brief Receives a message over from the server.
  * @param serverFD - The server's file descriptor.
- * @param msgBuffer - An array buffer where the recieved message will be stored.
+ * @param msgBuffer - An array buffer where the received message will be stored.
 */
 void receiveTCP(int serverFD,char* msgBuffer);
 
