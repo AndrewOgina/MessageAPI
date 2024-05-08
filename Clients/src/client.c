@@ -12,7 +12,7 @@ int getSocket(int serverType)
     return serverFD;
 }
 
-struct sockaddr_in get_serverAddr(int port,char address)
+struct sockaddr_in get_serverAddr(int port,char* address)
 {
     struct sockaddr_in serverAddr;
     memset(&serverAddr,0,sizeof(serverAddr));
