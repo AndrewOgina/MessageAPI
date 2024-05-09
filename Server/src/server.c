@@ -29,6 +29,8 @@ struct sockaddr_in get_sockaddr_in(int port)
     serverInfo.sin_family = AF_INET;
     serverInfo.sin_addr.s_addr = htonl(INADDR_ANY);
     serverInfo.sin_port = htons(port);
+    fprintf(stdout,"Server address struct filled successfully!\n");
+
     return serverInfo;
 }
 
@@ -40,6 +42,7 @@ void bind_and_listen(int *serverFD, struct sockaddr_in *serverInfo)
         close(*serverFD);
         exit(EXIT_FAILURE);
     }
+    fprintf(stdout,"Bind successful!\n");
 
     if ((listen(*serverFD, 10)) == -1)
     {
@@ -47,6 +50,8 @@ void bind_and_listen(int *serverFD, struct sockaddr_in *serverInfo)
         close(*serverFD);
         exit(EXIT_FAILURE);
     }
+    fprintf(stdout,"Listening....!\n");
+
 }
 
 int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *clientAddrlen)
