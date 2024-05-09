@@ -3,7 +3,7 @@
 Using sockets in C to create a messaging API
 
 ## REQUIREMENTS
-  TO-DO
+  TO-DO!
 
 ## BUILD
-  TO-DO
+  TO-DO!
