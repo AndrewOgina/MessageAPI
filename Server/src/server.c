@@ -57,14 +57,15 @@ void bind_and_listen(int *serverFD, struct sockaddr_in *serverInfo)
 int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *clientAddrlen)
 {
     char addrinfo[INET_ADDRSTRLEN];
-    int clientFD = accept(serverFD, (SA *)&clientInfo, clientAddrlen);
+    int clientFD = accept(serverFD, (SA *)clientInfo, clientAddrlen);
     if (clientFD == -1)
     {
         perror("accept: server side");
         close(serverFD);
         exit(EXIT_FAILURE);
     }
-    inet_ntop(AF_INET, &clientInfo, addrinfo, sizeof(addrinfo));
+    inet_ntop(AF_INET, clientInfo, addrinfo, sizeof(addrinfo));
+    fprintf(stdout,"Connections: %s\n",addrinfo);
     
     return clientFD;
 }
