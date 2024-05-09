@@ -40,7 +40,10 @@ void connectTCP(int serverFD, struct sockaddr_in serverAddr)
 
 void sendTCP(int serverFD, char *message)
 {
-    if((send(serverFD,message,strlen(message),0))==-1)
+    fgets(message, sizeof(message), stdin);
+    fprintf(stdout, "Sending:%s\n", message);
+
+    if ((send(serverFD, message, strlen(message), 0)) == -1)
     {
         close(serverFD);
         perror("Send: client side!");
