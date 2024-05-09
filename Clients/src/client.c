@@ -17,8 +17,8 @@ struct sockaddr_in get_serverAddr(int port, char *address)
     struct sockaddr_in serverAddr;
     memset(&serverAddr, 0, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(PORT);
-    if(inet_pton(AF_INET,address,&serverAddr.sin_addr))
+    serverAddr.sin_port = htons(port);
+    if ((inet_pton(AF_INET, address, &serverAddr.sin_addr)) == -1)
     {
         perror("inet_pton: Failed to get address!");
         exit(EXIT_FAILURE);
