@@ -59,5 +59,7 @@ void receiveTCP(int serverFD,char* msgBuffer)
         exit(EXIT_FAILURE);
     }
     msgBuffer[msgLen] = '\0';
+    printf("Message received: %s\n",msgBuffer);
+
 }
 
