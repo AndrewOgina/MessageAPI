@@ -2,12 +2,23 @@
 
 int getSocket(int serverType)
 {
+    int opt = 1;
     int serverFD = socket(AF_INET, serverType, 0);
     if (serverFD == -1)
     {
         perror("socket: server side!");
         exit(EXIT_FAILURE);
     }
+    fprintf(stdout,"Socket successfully created!");
+
+    if((setsockopt(serverFD,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt)))==-1)
+    {
+        close(serverFD);
+        perror("setsockopt: server side!");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(stdout,"Socket option set\n");
+
     return serverFD;
 }
 
