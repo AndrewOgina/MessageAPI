@@ -13,4 +13,4 @@ APP: $(MAIN_SOURCE) $(CLIENT_OBJECT)
 	$(CC) $(CFLAG) $^ -o $(TARGET)
 
 RUN: 
-	./$(TARGET)
+	./$(TARGET) $(LOCALHOST)
