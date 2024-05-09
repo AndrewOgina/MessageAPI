@@ -11,7 +11,6 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #define MAXLEN 4096
-#define PORT 8088
 #define SA struct sockaddr
 
 /**
