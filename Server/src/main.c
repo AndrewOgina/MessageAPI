@@ -1,5 +1,5 @@
 #include "../include/server.h"
-#define PORT 8088
+#define PORT 8080
 
 
 int main(int argc,char* argv[])
@@ -28,4 +28,4 @@ int main(int argc,char* argv[])
     }
     close(serverFD);
     close(clientFD);
-}
+} 
