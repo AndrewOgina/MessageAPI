@@ -13,16 +13,37 @@ int errHandle(int returnVal,int errVal,char* errorMsg)
         perror(errorMsg);
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout,"Socket successfully created!");
+    return returnVal;
+}
 
-    if((setsockopt(serverFD,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt)))==-1)
-    {
-        close(serverFD);
-        perror("setsockopt: server side!");
-        exit(EXIT_FAILURE);
-    }
-    fprintf(stdout,"Socket option set\n");
 
+int setup_server(int port,int sockType,int backlog)
+{
+    int serverFD;
+    SA_IN serverAddr;
+
+    // 1. Creating the socket.
+
+    errHandle((serverFD = socket(AF_INET,sockType,0)),SOCK_ERROR,"Socket: Server side!\n");
+    fprintf(stdout,"Socket created!\n");
+    
+    // 2. Filling the serverAddr struct.
+
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+    serverAddr.sin_port = htons(port);
+
+    // 3. Binding socket to address and port.
+
+    errHandle((bind(serverFD,(SA*)&serverAddr,sizeof(serverAddr))),SOCK_ERROR,"Bind: Server side!\n");
+    fprintf(stdout,"Socket binded to an address!\n");
+
+    // 4. Listen for clients.
+
+    errHandle((listen(serverFD,backlog)),SOCK_ERROR,"Listen: Server side!\n");
+    fprintf(stdout,"Listening...\n");
+
+    // 5. Returning the server's file descriptor.
     return serverFD;
 }
 
