@@ -1,12 +1,16 @@
 #include "../include/server.h"
 
-int getSocket(int serverType)
+/**
+ * @brief Error handling.
+ * @param returnVal - The value returned by a function.
+ * @param errVal - The value returned by unsuccessful function call.
+ * @param errorMsg - The message printed incase of an error.
+*/
+int errHandle(int returnVal,int errVal,char* errorMsg)
 {
-    int opt = 1;
-    int serverFD = socket(AF_INET, serverType, 0);
-    if (serverFD == -1)
+    if(returnVal == errVal)
     {
-        perror("socket: server side!");
+        perror(errorMsg);
         exit(EXIT_FAILURE);
     }
     fprintf(stdout,"Socket successfully created!");
