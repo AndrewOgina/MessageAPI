@@ -47,50 +47,23 @@ int setup_server(int port,int sockType,int backlog)
     return serverFD;
 }
 
-struct sockaddr_in get_sockaddr_in(int port)
+int acceptConnections(int serverFD)
 {
-    struct sockaddr_in serverInfo;
-    memset(&serverInfo, 0, sizeof(serverInfo));
-    serverInfo.sin_family = AF_INET;
-    serverInfo.sin_addr.s_addr = htonl(INADDR_ANY);
-    serverInfo.sin_port = htons(port);
-    fprintf(stdout,"Server address struct filled successfully!\n");
+    // Variable declarations!
 
-    return serverInfo;
-}
+    socklen_t clientAddrSize = sizeof(SA_IN);
+    SA_IN clientAddr;
+    int clientFD;
+    char clientIP[INET_ADDRSTRLEN];
 
-void bind_and_listen(int *serverFD, struct sockaddr_in *serverInfo)
-{
-    if ((bind(*serverFD, (SA *)serverInfo, sizeof(*serverInfo))) == -1)
-    {
-        perror("bind: server side");
-        close(*serverFD);
-        exit(EXIT_FAILURE);
-    }
-    fprintf(stdout,"Bind successful!\n");
+    // Accepting new connections!
 
-    if ((listen(*serverFD, 10)) == -1)
-    {
-        perror("listen: server side");
-        close(*serverFD);
-        exit(EXIT_FAILURE);
-    }
-    fprintf(stdout,"Listening....!\n");
+    errHandle((clientFD = accept(serverFD,(SA*)&clientAddr,&clientAddrSize)),SOCK_ERROR,"Accept: Server side!");
+    fprintf(stdout,"Accepting connections...\n");
 
-}
-
-int acceptConnections(int serverFD, struct sockaddr_in *clientInfo, socklen_t *clientAddrlen)
-{
-    char addrinfo[INET_ADDRSTRLEN];
-    int clientFD = accept(serverFD, (SA *)clientInfo, clientAddrlen);
-    if (clientFD == -1)
-    {
-        perror("accept: server side");
-        close(serverFD);
-        exit(EXIT_FAILURE);
-    }
-    inet_ntop(AF_INET, clientInfo, addrinfo, sizeof(addrinfo));
-    fprintf(stdout,"Connections: %s\n",addrinfo);
+    // Getting the Ip address 
+    inet_ntop(AF_INET,&clientAddr,clientIP,sizeof(clientIP));
+    fprintf(stdout,"Accepted connection from: %s...\n",clientIP);
     
     return clientFD;
 }
