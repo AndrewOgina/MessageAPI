@@ -20,7 +20,7 @@
  * @param port - The port number the server will run on.
  * @param sockType - Either SOCK_STREAM (TCP server) or SOCK_DGRAM (UDP server).
  * @return The server's file descriptor.
- */
+*/
 int setup_server(int port,int sockType,int backlog);
 
 /**
