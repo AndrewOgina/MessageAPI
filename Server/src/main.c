@@ -1,6 +1,6 @@
 #include "../include/server.h"
-#define PORT 8080
-
+#define PORT 8088
+#define BACKLOG 10
 
 int main(int argc,char* argv[])
 {
