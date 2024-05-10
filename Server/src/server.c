@@ -96,6 +96,6 @@ void handleLogin(int clientFD)
     fprintf(stdout,"Username: %s\n",usernameBuffer);
 
     // Confirmatory message!
-    errHandle((send(clientFD,successMsg,strlen(successMsg),0)),SOCK_ERROR,"Send: successfull login message!");
+    errHandle((send(clientFD,successMsg,strlen(successMsg),0)),SOCK_ERROR,"Send: successful login message!");
     errHandle((send(clientFD,usernameBuffer,strlen(usernameBuffer),0)),SOCK_ERROR,"Send: resending username!");
 }
