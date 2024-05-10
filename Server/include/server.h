@@ -16,21 +16,12 @@
 #define SA_IN struct sockaddr_in
 
 /**
- * @brief Fills a sockaddr_in  struct and returns it.
- * @param port - The port the server runs on.
- * @return A sockaddr_in struct
+ * @brief Sets up the server socket and listens for connections. 
+ * @param port - The port number the server will run on.
+ * @param sockType - Either SOCK_STREAM (TCP server) or SOCK_DGRAM (UDP server).
+ * @return The server's file descriptor.
  */
-struct sockaddr_in get_sockaddr_in(int port);
-
-/**
- * @brief Binds address and listens for connections.
- *
- * @param serverFD - The socket file descriptor
- * @param serverAddr - A pointer to a sockaddr_in struct containing server address info.
- *
- * @note Make sure the sockaddr_in struct is filled.
- */
-void bind_and_listen(int *serverFD, struct sockaddr_in *serverAddr);
+int setup_server(int port,int sockType,int backlog);
 
 /**
  * @brief Accepts incoming request and returns an accept file descriptor.
