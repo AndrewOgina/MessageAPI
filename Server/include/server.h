@@ -24,18 +24,12 @@
 int setup_server(int port,int sockType,int backlog);
 
 /**
- * @brief Accepts incoming request and returns an accept file descriptor.
- *        Also prints out successful connections.
- * @param serverFD -  The socket file descriptor.
- * @param clientAddr - A pointer to a sockaddr_in struct to store client address.
- * @param clientAddrlen - A pointer to a socklen_t instance to store the client;s address length.
- *
- * @return Returns
- *
- * @note Should be called within a loop.
- */
-int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *clientAddrlen);
-
+ * @brief Accepts new connections and stores their details.
+ * @param serverFD - The file descriptor the server is listening on.
+ * @return The connected client's file descriptor.
+ * @note FOR TCP SERVERS.
+*/
+int acceptConnections(int serverFD);
 
 /**
  * @brief Receive data from a TCP server and sends it back to sender
