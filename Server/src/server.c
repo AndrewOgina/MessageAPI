@@ -65,6 +65,7 @@ int acceptConnections(int serverFD)
     inet_ntop(AF_INET,&clientAddr,clientIP,sizeof(clientIP));
     fprintf(stdout,"Accepted connection from: %s...\n",clientIP);
     
+    // Returning the client's file descriptor.
     return clientFD;
 }
 
