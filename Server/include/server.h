@@ -11,20 +11,9 @@
 #include <netinet/in.h>
 #define SA struct sockaddr
 #define MAXLEN 4096
-
-// @warning: All functions work only with ipV4.
-
-/**
- * @include server.h
- *
- * @brief Creates a socket and returns the socket file descriptor. Does error handling.
- *
- * @param serverType - SOCK_STREAM(for TCP) or SOCK_DGRAM(for Datagram).
- *
- * @return An integer which is the socket file descriptor.
- * @note Ipv4 only.
- */
-int getSocket(int serverType);
+#define BACKLOG 10
+#define SOCK_ERROR -1
+#define SA_IN struct sockaddr_in
 
 /**
  * @brief Fills a sockaddr_in  struct and returns it.
