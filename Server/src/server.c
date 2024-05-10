@@ -68,49 +68,33 @@ int acceptConnections(int serverFD)
     return clientFD;
 }
 
-/**
- * @brief Receives message clients.
- * @param userName - The username of the sender.
- * @param msgBuffer - An array where the received message will be stored.
- * @return The received message .
- */
-char* receiveTCP(int clientFD,char* msgBuffer)
-{
-    int msgLen;
-    // TODO
-    // 10 is a randomly selected number for now...I'll update it.
-    if ((msgLen = recv(clientFD, msgBuffer, MAXLEN - 10, 0)) == -1)
-    {
-        perror("recv(): server side");
-        close(clientFD);
-        exit(EXIT_FAILURE);
-    }
-    // null terminating it.
-    msgBuffer[msgLen] = '\0';
-    return msgBuffer;
-}
 
-/**
- * @brief Sends message to a chosen client.
- * @param userName - The username of  the recipient.
- * @param message - The message to be sent.
- */
-void sendTCP(int clientFD,char* message)
+void handleLogin(int clientFD)
 {
-    int msgSize = strlen(message);
-    printf("Message size: %i",msgSize);
-    if((send(clientFD,message,msgSize,0))==-1)
-    {
-        perror("send: server side");
-        close(clientFD);
-        exit(EXIT_FAILURE);
-    }
-}
+    int maxUsernameSize = 26;
+    char usernameBuffer[maxUsernameSize];
+    int usernameSize;
+    // Prefixing some  messages! 
 
+    char welcomeMsg[] = "Welcome to OTM!\n\n";
+    char usernameReq[] = "Please enter your session username:";
+    char successMsg[] = "\nYou have now successfully logged in as:";
 
-void receive_and_send(int clientFD,char* msgBuffer)
-{
-    char* message = receiveTCP(clientFD,msgBuffer);
-    printf("message:::%s",message);
-    sendTCP(clientFD,message);
+    // Requesting session username!
+
+    errHandle((send(clientFD,welcomeMsg,strlen(welcomeMsg),0)),SOCK_ERROR,"Send: Welcome msg: Server side\n");
+    errHandle((send(clientFD,usernameReq,strlen(usernameReq),0)),SOCK_ERROR,"Send: User name request: server side!");
+
+    // Receiving the username!
+
+    errHandle((usernameSize = recv(clientFD,usernameBuffer,maxUsernameSize-1,0)),SOCK_ERROR,"Receive: Username: Server side!");
+
+    // Null terminating the username!
+
+    usernameBuffer[usernameSize] = '\0';
+    fprintf(stdout,"Username: %s\n",usernameBuffer);
+
+    // Confirmatory message!
+    errHandle((send(clientFD,successMsg,strlen(successMsg),0)),SOCK_ERROR,"Send: successfull login message!");
+    errHandle((send(clientFD,usernameBuffer,strlen(usernameBuffer),0)),SOCK_ERROR,"Send: resending username!");
 }
