@@ -32,10 +32,13 @@ int setup_server(int port,int sockType,int backlog);
 int acceptConnections(int serverFD);
 
 /**
- * @brief Receive data from a TCP server and sends it back to sender
+ * @brief Requests the session username of connected clients.
  * @param clientFD - The client's file descriptor.
  * @return void.
 */
-void receive_and_send(int clientFD,char* msgBuffer);
+void handleLogin(int clientFD);
+
+
+
 
 #endif
