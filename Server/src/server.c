@@ -46,14 +46,54 @@ int setup_server(int port, int sockType, int backlog)
     return serverFD;
 }
 
-int acceptConnections(int serverFD)
+/**
+ * @brief Requests the session username of connected clients.
+ * @param clientFD - The client's file descriptor.
+ * @return A formatted username.
+ */
+void handleLogin(int clientFD, char *userName)
+{
+    int usernameSize;
+    // Prefixing some  messages!
+
+    char welcomeMsg[25] = "WELCOME TO OTP.\n"; // Array should be large enough for bolding  and underlining tags!
+
+    // Bolding and underlining!
+    char* formatted_welcomeMsg = format_text(welcomeMsg,BOLD_UNDERLINE);
+
+    char loginMsg[32] = "You are logged in as:";
+    char* formatted_loginMsg =  format_text(loginMsg,BOLD);
+
+    // Requesting session username!
+
+    errHandle((send(clientFD, formatted_welcomeMsg, strlen(formatted_welcomeMsg), 0)), SOCK_ERROR, "Send: Welcome msg: Server side\n");
+    free(formatted_welcomeMsg);
+    // Receiving the username!
+
+    errHandle((usernameSize = recv(clientFD, userName, MAX_USERNAME_SIZE - 1, 0)), SOCK_ERROR, "Receive: Username: Server side!");
+    // Null terminating the username!
+
+    // A little bit of formatting.
+    char* formatted_userName = format_text(userName,BOLD_RED);
+
+    fprintf(stdout, "Username: %s\n", formatted_userName);
+
+    // Confirmatory message!
+    errHandle((send(clientFD, formatted_loginMsg, strlen(formatted_loginMsg), 0)), SOCK_ERROR, "Send: successful login message failed to be sent!");
+    free(formatted_loginMsg);
+    errHandle((send(clientFD, formatted_userName, strlen(formatted_userName), 0)), SOCK_ERROR, "Send: resending username failed to be sent!");
+    free(formatted_userName);
+}
+
+struct Clients acceptConnections(int serverFD)
 {
     // Variable declarations!
-
+    Clients clients;
     socklen_t clientAddrSize = sizeof(SA_IN);
     SA_IN clientAddr;
     int clientFD;
     char clientIP[INET_ADDRSTRLEN];
+    char userName[MAX_USERNAME_SIZE + 10];
 
     // Accepting new connections!
 
@@ -64,8 +104,12 @@ int acceptConnections(int serverFD)
     inet_ntop(AF_INET, &clientAddr, clientIP, sizeof(clientIP));
     fprintf(stdout, "Accepted connection from: %s...\n", clientIP);
 
+    handleLogin(clientFD, userName);
+
+    clients.clientFD = clientFD;
+    strcpy(clients.userName, userName);
     // Returning the client's file descriptor.
-    return clientFD;  
+    return clients;
 }
 
 void handleLogin(int clientFD)

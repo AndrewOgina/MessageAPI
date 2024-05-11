@@ -43,7 +43,7 @@ int setup_server(int port,int sockType,int backlog);
  * @return The connected client's file descriptor.
  * @note FOR TCP SERVERS.
 */
-int acceptConnections(int serverFD);
+struct Clients acceptConnections(int serverFD);
 
 /**
  * @brief Requests the session username of connected clients.
