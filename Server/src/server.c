@@ -1,4 +1,49 @@
 #include "../include/server.h"
+#define END_TAG "\033[0m"
+
+typedef enum Format
+{
+    BOLD,
+    UNDERLINE,
+    BOLD_UNDERLINE,
+    BOLD_RED
+}Format;
+
+/**
+ * @brief Takes a text then formats.
+ * @param text - The text to be formatted.
+ * @param format - BOLD / UNDERLINE / BOLD_UNDERLINE / BOLD_RED.
+ * @return A char* containing the formatted text.
+ * @warning FREE the char* after use
+ */
+char *format_text(char *text, Format format)
+{
+    int prefix_length = 15;
+    int end_tag_len = strlen(END_TAG);
+    int textLen = strlen(text);
+    char prefix[prefix_length];
+    char *formatted = (char *)malloc((prefix_length + end_tag_len + textLen + 1)); // +1 for the null terminator.
+
+    switch (format)
+    {
+    case BOLD:
+        strcpy(prefix,"\033[1m");
+        break;
+    case UNDERLINE:
+        strcpy(prefix,"\033[4m");
+        break;
+    case BOLD_UNDERLINE:
+        strcpy(prefix,"\033[1;4m");
+        break;
+    case BOLD_RED:
+        strcpy(prefix,"\033[1;32;40m");
+    } 
+    
+    strncpy(formatted, prefix, prefix_length);
+    strncat(formatted, text, textLen);
+    strncat(formatted, END_TAG, end_tag_len);
+    return formatted;
+}
 
 /**
  * @brief Error handling.
