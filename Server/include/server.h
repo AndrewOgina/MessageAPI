@@ -45,12 +45,9 @@ int setup_server(int port,int sockType,int backlog);
 */
 struct Clients acceptConnections(int serverFD);
 
-/**
- * @brief Requests the session username of connected clients.
- * @param clientFD - The client's file descriptor.
- * @return void.
-*/
-void handleLogin(int clientFD);
+void handleMessaging(struct Clients clients);
+
+
 
 
 
