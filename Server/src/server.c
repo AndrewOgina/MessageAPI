@@ -112,32 +112,17 @@ struct Clients acceptConnections(int serverFD)
     return clients;
 }
 
-void handleLogin(int clientFD)
+void handleMessaging(struct Clients clients)
 {
-    int maxUsernameSize = 26;
-    char usernameBuffer[maxUsernameSize];
-    int usernameSize;
-    // Prefixing some  messages! 
-
-    char welcomeMsg[] = "Welcome to OTM!\n\n";
-    char usernameReq[] = "Please enter your session username:";
-    char successMsg[] = "\nYou have now successfully logged in as:";
-
-    // Requesting session username!
-
-    errHandle((send(clientFD, welcomeMsg, strlen(welcomeMsg), 0)), SOCK_ERROR, "Send: Welcome msg: Server side\n");
-    errHandle((send(clientFD, usernameReq, strlen(usernameReq), 0)), SOCK_ERROR, "Send: User name request: server side!");
-
-    // Receiving the username!
-
-    errHandle((usernameSize = recv(clientFD, usernameBuffer, maxUsernameSize - 1, 0)), SOCK_ERROR, "Receive: Username: Server side!");
-
-    // Null terminating the username!
-
-    usernameBuffer[usernameSize] = '\0';
-    fprintf(stdout, "Username: %s\n", usernameBuffer);
-
-    // Confirmatory message!
-    errHandle((send(clientFD, successMsg, strlen(successMsg), 0)), SOCK_ERROR, "Send: successful login message!");
-    errHandle((send(clientFD, usernameBuffer, strlen(usernameBuffer), 0)), SOCK_ERROR, "Send: resending username!");
+    char message[MAXLEN];
+    char* formatted_userName = format_text(clients.userName,BOLD_RED);
+    strcpy(message, formatted_userName);
+    strcat(message, "Hello World!");
+    char *newLine = strchr(message, '\n');
+    *newLine = ':';
+    send(clients.clientFD, message, strlen(message), 0);
+    free(formatted_userName);
 }
+
+// TODO Use the client struct to store connected client info
+// TODO Try to use threads / select to avoid non blocking code.
