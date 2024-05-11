@@ -9,11 +9,25 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+
 #define SA struct sockaddr
 #define MAXLEN 4096
 #define BACKLOG 10
 #define SOCK_ERROR -1
 #define SA_IN struct sockaddr_in
+#define MAX_USERNAME_SIZE 26
+#define MAX_CLIENTS 10
+
+/**
+ * @brief Stores the client details.
+ * @param clientFD - The client's File descriptor.
+ * @param userName - The username of the client. 
+*/
+typedef struct Clients
+{
+    int clientFD; //-> The client's File descriptor.
+    char userName[MAX_USERNAME_SIZE+10]; //--> The username of the client. 
+}Clients;
 
 /**
  * @brief Sets up the server socket and listens for connections. 
