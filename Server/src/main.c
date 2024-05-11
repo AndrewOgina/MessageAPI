@@ -4,9 +4,9 @@
 
 int main(int argc,char* argv[])
 {
-    int serverFD, clientFD;
+    int serverFD;
+    Clients client;
     serverFD = setup_server(PORT,SOCK_STREAM,BACKLOG);
-    clientFD = acceptConnections(serverFD);
-
-    handleLogin(clientFD);
+    client = acceptConnections(serverFD); 
+    handleMessaging(client);
 }
