@@ -9,43 +9,50 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <stdbool.h>
+#include <sys/epoll.h>
 
 #define SA struct sockaddr
 #define MAXLEN 4096
 #define BACKLOG 10
 #define SOCK_ERROR -1
 #define SA_IN struct sockaddr_in
-#define MAX_USERNAME_SIZE 26
+#define USERNAME_SIZE 26
 #define MAX_CLIENTS 10
+#define ONLINE true
+#define OFFLINE false
+
 
 /**
- * @brief Stores the client details.
+ * @brief The struct holding the client's information.
  * @param clientFD - The client's File descriptor.
  * @param userName - The username of the client. 
+ * @param state - Either ONLINE or OFFLINE.
 */
-typedef struct Clients
+typedef struct Client
 {
-    int clientFD; //-> The client's File descriptor.
-    char userName[MAX_USERNAME_SIZE+10]; //--> The username of the client. 
-}Clients;
+    int client_fd; //-> The client's File descriptor.
+    char username[USERNAME_SIZE]; //-> The username of the client. 
+    bool state; //-> Either ONLINE or OFFLINE.
+}Client;
 
 /**
  * @brief Sets up the server socket and listens for connections. 
  * @param port - The port number the server will run on.
- * @param sockType - Either SOCK_STREAM (TCP server) or SOCK_DGRAM (UDP server).
+ * @param sock_type - Either SOCK_STREAM (TCP server) or SOCK_DGRAM (UDP server).
+ * @param backlog- The number of clients the server can listen at a time.
  * @return The server's file descriptor.
 */
-int setup_server(int port,int sockType,int backlog);
+int setup_server(int port,int sock_type,int backlog);
 
 /**
- * @brief Accepts new connections and stores their details.
+ * @brief Accepts new connections,stores their details and receives and broadcasts messages.
  * @param serverFD - The file descriptor the server is listening on.
- * @return The connected client's file descriptor.
- * @note FOR TCP SERVERS.
+ * @return void!
+ * @note FOR TCP SERVERS & FOR BROADCASTS.
 */
-struct Clients acceptConnections(int serverFD);
+void handle_connections(int serverFD);
 
-void handleMessaging(struct Clients clients);
 
 
 
