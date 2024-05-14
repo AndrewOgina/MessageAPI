@@ -7,8 +7,8 @@ This repository contains a messaging server socket implementation in C. It allow
 The server should do the following Basics<br>
 * [x] Listen for connections.
 * [x] Accept connections.
-* [ ] Store a list of connected clients.
-* [ ] Receive messages and send to clients as per their usernames.
+* [x] Store a list of connected clients.
+* [x] Receive messages and send to clients as per their usernames.
 * [ ] If a client sends 'EXIT'|| 'QUIT' it terminates the connections.
 * [ ] Add some terminal GUI.
 
