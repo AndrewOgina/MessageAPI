@@ -4,9 +4,7 @@
 
 int main(int argc,char* argv[])
 {
-    int serverFD;
-    Clients client;
-    serverFD = setup_server(PORT,SOCK_STREAM,BACKLOG);
-    client = acceptConnections(serverFD); 
-    handleMessaging(client);
+    int server_fd; //> The server's file descriptor.
+    server_fd = setup_server(PORT,SOCK_STREAM,BACKLOG);
+    handle_connections(server_fd); 
 }
