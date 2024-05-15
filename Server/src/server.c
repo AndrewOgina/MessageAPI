@@ -86,7 +86,6 @@ int setup_server(int port, int sock_type, int backlog)
 
 void receive_and_broadcast(int sender_fd, int epoll_fd, struct Client *clients)
 {
-    int username_size;    //> Username size.
     char message[MAXLEN]; //> Buffer to store the message.
     ssize_t bytes_received;
     bytes_received = recv(sender_fd, message, MAXLEN - 1, 0);
