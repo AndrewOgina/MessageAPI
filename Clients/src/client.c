@@ -98,7 +98,7 @@ int connect_to_server(int port, char *server_address)
     address_size = sizeof(SA_IN);
 
     check_error((inet_pton(AF_INET, server_address, &client_address.sin_addr)), SOCK_ERROR, "inet_pton: Failed!");
-    check_error((connect_status = connect(server_fd, (SA*)&client_address, address_size)), SOCK_ERROR, "connect: Failed to connect to server!");
+    check_error((connect_status = connect(server_fd, (SA *)&client_address, address_size)), SOCK_ERROR, "connect: Failed to connect to server!");
     fprintf(stdout, "Connected to server successfully!\n");
     return server_fd;
 }
@@ -109,7 +109,9 @@ void join_broadcast(int *server_fd)
     char message[MAXLEN]; //>Buffer for messages being sent
     char welcome_msg[40];
     char username[USERNAME_SIZE]; //>Buffer for the username.
-    int size_received;
+    int size_received,message_size,size_sent;
+    int username_size;
+    int bytes_sent;
 
     // Getting welcome!
     check_error((size_received = recv(*server_fd, welcome_msg, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to get welcome note!");
@@ -119,7 +121,8 @@ void join_broadcast(int *server_fd)
     // sending the username
     printf("Username:");
     fgets(username, USERNAME_SIZE - 2, stdin);
-    check_error((send(*server_fd, username, strnlen(username,USERNAME_SIZE), 0)), SOCK_ERROR, "send: failed to send username!");
+    username_size = strnlen(username,USERNAME_SIZE);
+    check_error((send(*server_fd, username, username_size, 0)), SOCK_ERROR, "send: failed to send username!");
 
     // Receiving messages!
     while (1)
