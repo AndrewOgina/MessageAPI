@@ -43,17 +43,23 @@ void *receive_message(void *p_server_fd)
 
 int connect_to_server(int port, char *server_address)
 {
-    struct sockaddr_in serverAddr;
-    memset(&serverAddr, 0, sizeof(serverAddr));
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(port);
-    if ((inet_pton(AF_INET, address, &serverAddr.sin_addr)) == -1)
-    {
-        perror("inet_pton: Failed to get address!");
-        exit(EXIT_FAILURE);
-    }
-    fprintf(stdout, "Server address retrieved successfully!\n");
-    return serverAddr;
+    int server_fd;          // The server's file descriptor.
+    int connect_status;     // The return value of connect
+    socklen_t address_size; // Holds the size of sockaddr_in
+    SA_IN client_address;   // Holds client's address information.
+
+    // Creating the socket
+    check_error((server_fd = socket(AF_INET, SOCK_STREAM, 0)), SOCK_ERROR, "client: failed to create socket!");
+    fprintf(stdout, "Socket created successfully!\n");
+
+    client_address.sin_family = AF_INET;
+    client_address.sin_port = htons(port);
+    address_size = sizeof(SA_IN);
+
+    check_error((inet_pton(AF_INET, server_address, &client_address.sin_addr)), SOCK_ERROR, "inet_pton: Failed!");
+    check_error((connect_status = connect(server_fd, (SA*)&client_address, address_size)), SOCK_ERROR, "connect: Failed to connect to server!");
+    fprintf(stdout, "Connected to server successfully!\n");
+    return server_fd;
 }
 
 void connectTCP(int serverFD, struct sockaddr_in serverAddr)
