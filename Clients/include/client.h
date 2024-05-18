@@ -26,19 +26,11 @@ int connect_to_server(int port,char* server_address);
 
 
 /**
- * @brief Sends a message over the server file descriptor.
- * @param serverFD - The server's file descriptor.
- * @param message - An array containing the message to be sent.
- * @return void.
+ * @details Allows the client to send and receive messages.
+ * @param server_fd - The server's file descriptor.
+ * @return void!
+ * @note Uses Threads.
 */
-void sendTCP(int serverFD,char* message);
-
-/**
- * @brief Receives a message over from the server.
- * @param serverFD - The server's file descriptor.
- * @param msgBuffer - An array buffer where the received message will be stored.
-*/
-void receiveTCP(int serverFD,char* msgBuffer);
-
+void join_broadcast(int* server_fd);
 
 #endif
