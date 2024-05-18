@@ -1,11 +1,27 @@
 #include "../include/client.h"
 
-int getSocket(int serverType)
+/**
+ * @brief Checks if a function returned an error and handles it accordingly.
+ * @param return_val - The value returned by the function.
+ * @param error_val - The value the function will return if an error occurs.
+ * @param error_message - The message displayed incase an error occurs.
+ * @return - The value returned by the function
+ * @warning - The program exits if an error occurs!
+ */
+int check_error(int return_val, int error_val, char *error_message);
+
+/**
+ * @brief A thread compatible function for receiving Messages.
+ * @param p_server_fd  A void pointer to the server's file descriptor.
+ * @return - A void pointer - NULL
+ */
+void *receive_message(void *p_server_fd);
+
+int check_error(int return_val, int error_val, char *error_message)
 {
-    int serverFD;
-    if ((serverFD = socket(AF_INET, serverType, 0)) == -1)
+    if (return_val == error_val)
     {
-        perror("Socket: client side!");
+        perror(error_message);
         exit(EXIT_FAILURE);
     }
     fprintf(stdout, "Socket created successfully!\n");
