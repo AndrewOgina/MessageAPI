@@ -125,11 +125,28 @@ void join_broadcast(int *server_fd)
     check_error((send(*server_fd, username, username_size, 0)), SOCK_ERROR, "send: failed to send username!");
 
     // Receiving messages!
+    check_error((pthread_create(&new_thread, NULL, receive_message, &server_fd)), EAGAIN, "Pthreads failed!");
+
     while (1)
     {
-        pthread_create(&new_thread, NULL, receive_message, &server_fd);
-        pthread_join(new_thread,NULL);
         fgets(message, MAXLEN - 1, stdin);
-        check_error((send(*server_fd,message,strnlen(message,MAXLEN),0)),SOCK_ERROR,"send: Failed to send messages!");
+        message_size = strnlen(message,MAXLEN);
+        memmove(message+username_size,message,message_size+1);
+        memcpy(message,username,username_size);
+        size_sent = message_size + username_size +1;
+        if((bytes_sent =send(*server_fd, message, size_sent, 0))<0)
+        {
+            if(errno != EWOULDBLOCK || errno != EAGAIN)
+            {
+                close(*server_fd);
+                check_error(bytes_sent,-1,"Failed to send!");
+            }
+        }
+        else
+        {
+            printf(">>sent<<");
+        }
     }
+    pthread_join(new_thread, NULL);
+    close(*server_fd);;
 }
