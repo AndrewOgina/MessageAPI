@@ -70,9 +70,9 @@ void *receive_message(void *p_server_fd)
         }
         else
         {
-    // Null Termination!
-    message_buffer[size_received] = '\0';
-    fprintf(stdout, "%s\n", message_buffer);
+            // Null Termination!
+            message_buffer[size_received] = '\0';
+            fprintf(stdout, "%s\n", message_buffer);
         }
     }
     pthread_exit(NULL);
