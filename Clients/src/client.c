@@ -74,6 +74,7 @@ void join_broadcast(int *server_fd)
     check_error((size_received = recv(*server_fd, welcome_msg, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to get welcome note!");
     welcome_msg[size_received] = '\0';
     puts(welcome_msg);
+
     // sending the username
     printf("Username:");
     fgets(username, USERNAME_SIZE - 2, stdin);
@@ -83,6 +84,7 @@ void join_broadcast(int *server_fd)
     while (1)
     {
         pthread_create(&new_thread, NULL, receive_message, &server_fd);
+        pthread_join(new_thread,NULL);
         fgets(message, MAXLEN - 1, stdin);
         check_error((send(*server_fd,message,strnlen(message,MAXLEN),0)),SOCK_ERROR,"send: Failed to send messages!");
     }
