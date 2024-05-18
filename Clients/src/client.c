@@ -24,11 +24,24 @@ int check_error(int return_val, int error_val, char *error_message)
         perror(error_message);
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout, "Socket created successfully!\n");
-    return serverFD;
+    return return_val;
 }
 
-struct sockaddr_in get_serverAddr(int port, char *address)
+void *receive_message(void *p_server_fd)
+{
+    char message_buffer[MAXLEN]; //>Holds incoming message.
+    int size_received;           //>The size of the message received.
+    int server_fd;               //>The server's file descriptor.
+    server_fd = *(int *)p_server_fd;
+    check_error((size_received = recv(server_fd, message_buffer, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to receive message!");
+
+    // Null Termination!
+    message_buffer[size_received] = '\0';
+    fprintf(stdout, "%s\n", message_buffer);
+    return NULL;
+}
+
+int connect_to_server(int port, char *server_address)
 {
     struct sockaddr_in serverAddr;
     memset(&serverAddr, 0, sizeof(serverAddr));
