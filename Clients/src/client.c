@@ -90,6 +90,9 @@ int connect_to_server(int port, char *server_address)
     check_error((server_fd = socket(AF_INET, SOCK_STREAM, 0)), SOCK_ERROR, "client: failed to create socket!");
     fprintf(stdout, "Socket created successfully!\n");
 
+    set_nonblocking(server_fd);
+
+    memset(&client_address, 0, sizeof(client_address));
     client_address.sin_family = AF_INET;
     client_address.sin_port = htons(port);
     address_size = sizeof(SA_IN);
