@@ -17,6 +17,13 @@ int check_error(int return_val, int error_val, char *error_message);
  */
 void *receive_message(void *p_server_fd);
 
+/**
+ * @brief Sets the socket to nonblocking mode.
+ * @param sock_fd - The socket file descriptor.
+ * @return Void!
+ */
+void set_nonblocking(int sock_fd);
+
 int check_error(int return_val, int error_val, char *error_message)
 {
     if (return_val == error_val)
@@ -25,6 +32,13 @@ int check_error(int return_val, int error_val, char *error_message)
         exit(EXIT_FAILURE);
     }
     return return_val;
+}
+
+void set_nonblocking(int sock_fd)
+{
+    int flags;
+    check_error((flags = fcntl(sock_fd, F_GETFL, 0)), SOCK_ERROR, "fcntl F_GETFL: Failed!");
+    check_error((fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK)), SOCK_ERROR, "fcntl F_SETFL: Failed!");
 }
 
 void *receive_message(void *p_server_fd)
