@@ -47,11 +47,35 @@ void *receive_message(void *p_server_fd)
     int size_received;           //>The size of the message received.
     int server_fd;               //>The server's file descriptor.
     server_fd = *(int *)p_server_fd;
-    check_error((size_received = recv(server_fd, message_buffer, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to receive message!");
+    while (1)
+    {
+        size_received = recv(server_fd, message_buffer, MAXLEN - 1, 0);
 
+        if (size_received < 0)
+        {
+            if (errno == EWOULDBLOCK || errno == EAGAIN)
+            {
+                usleep(10000); // Sleeps for 10ms
+                continue;
+            }
+            else
+            {
+                check_error(size_received, -1, "recv failed!");
+            }
+        }
+        else if (size_received == 0)
+        {
+            printf("Server Closed connection!");
+            break;
+        }
+        else
+        {
     // Null Termination!
     message_buffer[size_received] = '\0';
     fprintf(stdout, "%s\n", message_buffer);
+        }
+    }
+    pthread_exit(NULL);
     return NULL;
 }
 
