@@ -62,39 +62,28 @@ int connect_to_server(int port, char *server_address)
     return server_fd;
 }
 
-void connectTCP(int serverFD, struct sockaddr_in serverAddr)
+void join_broadcast(int *server_fd)
 {
-    if ((connect(serverFD, (SA *)&serverAddr, sizeof(serverAddr))) == -1)
-    {
-        perror("Connect: client side!");
-        close(serverFD);
-        exit(EXIT_FAILURE);
-    }
-    fprintf(stdout, "Connection established successfully!\n");
-}
+    pthread_t new_thread; //>An instance of pthread;
+    char message[MAXLEN]; //>Buffer for messages being sent
+    char welcome_msg[40];
+    char username[USERNAME_SIZE]; //>Buffer for the username.
+    int size_received;
 
-void sendTCP(int serverFD, char *message)
-{
-    fgets(message, sizeof(message), stdin);
-    fprintf(stdout, "Sending:%s\n", message);
+    // Getting welcome!
+    check_error((size_received = recv(*server_fd, welcome_msg, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to get welcome note!");
+    welcome_msg[size_received] = '\0';
+    puts(welcome_msg);
+    // sending the username
+    printf("Username:");
+    fgets(username, USERNAME_SIZE - 2, stdin);
+    check_error((send(*server_fd, username, strnlen(username,USERNAME_SIZE), 0)), SOCK_ERROR, "send: failed to send username!");
 
-    if ((send(serverFD, message, strlen(message), 0)) == -1)
+    // Receiving messages!
+    while (1)
     {
-        close(serverFD);
-        perror("Send: client side!");
-        exit(EXIT_FAILURE);
+        pthread_create(&new_thread, NULL, receive_message, &server_fd);
+        fgets(message, MAXLEN - 1, stdin);
+        check_error((send(*server_fd,message,strnlen(message,MAXLEN),0)),SOCK_ERROR,"send: Failed to send messages!");
     }
-}
-
-void receiveTCP(int serverFD, char *msgBuffer)
-{
-    int msgLen;
-    if ((msgLen = recv(serverFD, msgBuffer, sizeof(msgBuffer), 0)) == -1)
-    {
-        close(serverFD);
-        perror("recv: client side!");
-        exit(EXIT_FAILURE);
-    }
-    msgBuffer[msgLen] = '\0';
-    printf("Message received: %s\n", msgBuffer);
 }
