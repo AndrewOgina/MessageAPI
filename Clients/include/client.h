@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
+#include <pthread.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -12,30 +13,17 @@
 #include <netinet/in.h>
 #define MAXLEN 4096
 #define SA struct sockaddr
-
+#define SA_IN struct sockaddr_in
+#define SOCK_ERROR -1
+#define USERNAME_SIZE 25
 /**
- * @brief Creates a socket and returns the socket file descriptor.
- * @param serverType - SOCK_STREAM(for TCP) or SOCK_DGRAM(for Datagram).
- * @return An integer which is the socket file descriptor.
- * @note Ipv4 only.
+ * @brief Connects the client to the server.
+ * @param port - The port the server is listening on.
+ * @param server_address - The server's address.
+ * @return The server's file descriptor.
 */
-int getSocket(int serverType);
+int connect_to_server(int port,char* server_address);
 
-/**
- * @brief Fills a sockaddr_in  struct and returns it.
- * @param port - The port the server runs on.
- * @return A sockaddr_in struct
- */
-struct sockaddr_in get_serverAddr(int port,char* address);
-
-/**
- * @brief Connects to a TCP server.
- * @param serverFD - The socket file descriptor for the server.
- * @param serverAddr -  A sockaddr_in struct containing the server address info.
- * @return void.
- * @note The serverAddr struct must be filled. 
-*/
-void connectTCP(int serverFD,struct sockaddr_in serverAddr);
 
 /**
  * @brief Sends a message over the server file descriptor.
