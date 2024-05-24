@@ -76,27 +76,31 @@ void set_nonblocking(int sock_fd)
     check_error((fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK)), SOCK_ERROR, "fcntl F_SETFL: Failed!");
 }
 
-int connect_to_server(int port, char *server_address)
+int connect_to_server(int port, char *ip_address, char *username)
 {
-    int server_fd;          // The server's file descriptor.
-    int connect_status;     // The return value of connect
-    socklen_t address_size; // Holds the size of sockaddr_in
-    SA_IN client_address;   // Holds client's address information.
+    int server_fd;           //> The server's file descriptor.
+    int buffer_len = 50;     //> The approximate length of the welcome message.
+    SA_IN server_address;    //> Server's address information.
+    int addrlen;             //> Size of server_address.
+    int bytes_received;      //> Bytes received.
+    char buffer[buffer_len]; //> Welcome message!
 
-    // Creating the socket
-    check_error((server_fd = socket(AF_INET, SOCK_STREAM, 0)), SOCK_ERROR, "client: failed to create socket!");
-    fprintf(stdout, "Socket created successfully!\n");
-
+    check_error((server_fd = socket(AF_INET, SOCK_STREAM, 0)), SOCK_ERROR, "Socket: failed to create socket!");
+    fprintf(stdout, "Socket created!\n");
     set_nonblocking(server_fd);
 
-    memset(&client_address, 0, sizeof(client_address));
-    client_address.sin_family = AF_INET;
-    client_address.sin_port = htons(port);
-    address_size = sizeof(SA_IN);
+    // Filling the server address information.
+    memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(port);
+    check_error((inet_pton(AF_INET, ip_address, &server_address.sin_addr)), SOCK_ERROR, "inet_pton: Failed to convert!");
+    addrlen = sizeof(server_address);
 
-    check_error((inet_pton(AF_INET, server_address, &client_address.sin_addr)), SOCK_ERROR, "inet_pton: Failed!");
-    check_error((connect_status = connect(server_fd, (SA *)&client_address, address_size)), SOCK_ERROR, "connect: Failed to connect to server!");
-    fprintf(stdout, "Connected to server successfully!\n");
+    check_error((connect(server_fd, (SA *)&server_address, addrlen)), SOCK_ERROR, "connect: failed to connect to server!");
+    fprintf(stdout, "Connection established!\n");
+
+    check_error((bytes_received = recv(server_fd, buffer, buffer_len - 1, 0)), SOCK_ERROR, "recv: failed to get welcome message!");
+    check_error((send(server_fd, username, strlen(username), 0)), SOCK_ERROR, "send: failed to send username!");
     return server_fd;
 }
 
