@@ -17,6 +17,13 @@ int check_error(int return_val, int error_val, char *error_message);
  */
 void set_nonblocking(int sock_fd);
 
+/**
+ * @brief Broadcasts your message to the server!
+ * @param server_fd The server's file descriptor.
+ * @param username The session username.
+ */
+void send_message(int server_fd, char *username);
+
 int check_error(int return_val, int error_val, char *error_message)
 {
     if (return_val == error_val)
@@ -27,38 +34,36 @@ int check_error(int return_val, int error_val, char *error_message)
     return return_val;
 }
 
-void set_nonblocking(int sock_fd)
+void send_message(int server_fd, char *username)
 {
-    int flags;
-    check_error((flags = fcntl(sock_fd, F_GETFL, 0)), SOCK_ERROR, "fcntl F_GETFL: Failed!");
-    check_error((fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK)), SOCK_ERROR, "fcntl F_SETFL: Failed!");
-}
+    int bytes_read;              //> Bytes read from the stdin.
+    int bytes_sent;              //> Bytes sent.
+    int username_length;         //> The length of the username!
+    char message_buffer[MAXLEN]; //> Stores the message to be sent!
 
-void *receive_message(void *p_server_fd)
-{
-    char message_buffer[MAXLEN]; //>Holds incoming message.
-    int size_received;           //>The size of the message received.
-    int server_fd;               //>The server's file descriptor.
-    server_fd = *(int *)p_server_fd;
-    while (1)
+    username_length = strlen(username);
+    strncpy(message_buffer, username, username_length);
+
+    while(1)
     {
-        size_received = recv(server_fd, message_buffer, MAXLEN - 1, 0);
-
-        if (size_received < 0)
+        bytes_read = read(STDIN_FILENO,message_buffer+username_length+1,MAXLEN-username_length-1);
+        if(bytes_read == -1)
         {
-            if (errno == EWOULDBLOCK || errno == EAGAIN)
+            if(errno == EWOULDBLOCK || errno == EAGAIN)
             {
                 usleep(10000); // Sleeps for 10ms
                 continue;
             }
             else
             {
-                check_error(size_received, -1, "recv failed!");
+                perror("read: failed to read from the stdin!");
+                exit(EXIT_FAILURE);
             }
         }
-        else if (size_received == 0)
+        else if(bytes_read >0)
         {
-            printf("Server Closed connection!");
+            message_buffer[bytes_read+username_length+1] = '\0';
+            check_error((bytes_sent=send(server_fd,message_buffer,strlen(message_buffer),0)),SOCK_ERROR,"send: failed to send message!");
             break;
         }
         else
