@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Provide the: 1.Server address!\n             2.Your username!\n");
         exit(EXIT_FAILURE);
     }
-    int server_fd = connect_to_server(PORT, argv[1]);
+    int server_fd = connect_to_server(PORT, argv[1],argv[2]);
 
-    join_broadcast(&server_fd);
+    join_broadcast(server_fd,argv[2]);
     
 }
