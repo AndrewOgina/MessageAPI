@@ -7,7 +7,7 @@ MAIN_SOURCE = src/main.c
 LOCALHOST = 127.0.0.1
 
 $(CLIENT_OBJECT): $(CLIENT_SOURCE)
-	$(CC) $(CFLAG) -c $< -o $@ -lpthread
+	$(CC) $(CFLAG) -c $< -o $@ 
 
 APP: $(MAIN_SOURCE) $(CLIENT_OBJECT)
 	$(CC) $(CFLAG) $^ -o $(TARGET)
