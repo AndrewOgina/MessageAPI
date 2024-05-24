@@ -29,9 +29,10 @@ int connect_to_server(int port,char* ip_address,char* username);
 /**
  * @details Allows the client to send and receive messages.
  * @param server_fd - The server's file descriptor.
+ * @param username - The client's session username.
  * @return void!
  * @note Uses Threads.
 */
-void join_broadcast(int* server_fd);
+void join_broadcast(int server_fd,char* username);
 
 #endif
