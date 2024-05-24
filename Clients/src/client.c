@@ -11,13 +11,6 @@
 int check_error(int return_val, int error_val, char *error_message);
 
 /**
- * @brief A thread compatible function for receiving Messages.
- * @param p_server_fd  A void pointer to the server's file descriptor.
- * @return - A void pointer - NULL
- */
-void *receive_message(void *p_server_fd);
-
-/**
  * @brief Sets the socket to nonblocking mode.
  * @param sock_fd - The socket file descriptor.
  * @return Void!
