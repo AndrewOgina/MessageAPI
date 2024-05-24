@@ -5,7 +5,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
-#include <pthread.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -21,9 +20,10 @@
  * @brief Connects the client to the server.
  * @param port - The port the server is listening on.
  * @param server_address - The server's address.
+ * @param username - The client's session username.
  * @return The server's file descriptor.
 */
-int connect_to_server(int port,char* server_address);
+int connect_to_server(int port,char* ip_address,char* username);
 
 
 /**
