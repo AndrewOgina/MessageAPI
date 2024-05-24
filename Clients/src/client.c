@@ -66,15 +66,14 @@ void send_message(int server_fd, char *username)
             check_error((bytes_sent=send(server_fd,message_buffer,strlen(message_buffer),0)),SOCK_ERROR,"send: failed to send message!");
             break;
         }
-        else
-        {
-            // Null Termination!
-            message_buffer[size_received] = '\0';
-            fprintf(stdout, "%s\n", message_buffer);
-        }
     }
-    pthread_exit(NULL);
-    return NULL;
+}
+
+void set_nonblocking(int sock_fd)
+{
+    int flags;
+    check_error((flags = fcntl(sock_fd, F_GETFL, 0)), SOCK_ERROR, "fcntl F_GETFL: Failed!");
+    check_error((fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK)), SOCK_ERROR, "fcntl F_SETFL: Failed!");
 }
 
 int connect_to_server(int port, char *server_address)
