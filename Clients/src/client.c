@@ -104,50 +104,18 @@ int connect_to_server(int port, char *ip_address, char *username)
     return server_fd;
 }
 
-void join_broadcast(int *server_fd)
+void join_broadcast(int server_fd, char *username)
 {
-    pthread_t new_thread; //>An instance of pthread;
-    char message[MAXLEN]; //>Buffer for messages being sent
-    char welcome_msg[40];
-    char username[USERNAME_SIZE]; //>Buffer for the username.
-    int size_received,message_size,size_sent;
-    int username_size;
-    int bytes_sent;
+    char message_buffer[MAXLEN]; //> Received messages.
+    int bytes_received;
 
-    // Getting welcome!
-    check_error((size_received = recv(*server_fd, welcome_msg, MAXLEN - 1, 0)), SOCK_ERROR, "recv: Failed to get welcome note!");
-    welcome_msg[size_received] = '\0';
-    puts(welcome_msg);
-
-    // sending the username
-    printf("Username:");
-    fgets(username, USERNAME_SIZE - 2, stdin);
-    username_size = strnlen(username,USERNAME_SIZE);
-    check_error((send(*server_fd, username, username_size, 0)), SOCK_ERROR, "send: failed to send username!");
-
-    // Receiving messages!
-    check_error((pthread_create(&new_thread, NULL, receive_message, &server_fd)), EAGAIN, "Pthreads failed!");
+    set_nonblocking(STDIN_FILENO);
+    set_nonblocking(STDOUT_FILENO);
 
     while (1)
     {
-        fgets(message, MAXLEN - 1, stdin);
-        message_size = strnlen(message,MAXLEN);
-        memmove(message+username_size,message,message_size+1);
-        memcpy(message,username,username_size);
-        size_sent = message_size + username_size +1;
-        if((bytes_sent =send(*server_fd, message, size_sent, 0))<0)
-        {
-            if(errno != EWOULDBLOCK || errno != EAGAIN)
-            {
-                close(*server_fd);
-                check_error(bytes_sent,-1,"Failed to send!");
-            }
-        }
-        else
-        {
-            printf(">>sent<<");
-        }
+        send_message(server_fd, username);
+        check_error((bytes_received = recv(server_fd, message_buffer, MAXLEN - 1, 0)), SOCK_ERROR, "recv:failed to send message!");
     }
-    pthread_join(new_thread, NULL);
-    close(*server_fd);;
+    close(server_fd);
 }
