@@ -1,12 +1,17 @@
 #include "../include/client.h"
+/**
+ * @brief Sets the socket passed to non-blocking mode.
+ * @param sock_fd - The file descriptor.
+ * @return void!
+ */
+void set_nonblocking(int sock_fd);
 
 /**
- * @brief Checks if a function returned an error and handles it accordingly.
- * @param return_val - The value returned by the function.
- * @param error_val - The value the function will return if an error occurs.
- * @param error_message - The message displayed incase an error occurs.
- * @return - The value returned by the function
- * @warning - The program exits if an error occurs!
+ * @brief Checks for errors based on return value.
+ * @param return_val - The value returned by the function call.
+ * @param error_val- Expected value that the function returns incase of an error.
+ * @param error_message - The error message.
+ * @return The return value of the function.
  */
 int check_error(int return_val, int error_val, char *error_message);
 
