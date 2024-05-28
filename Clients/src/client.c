@@ -121,9 +121,10 @@ void join_broadcast(int server_fd, char *username)
         // Check for user input from stdin
         if (FD_ISSET(STDIN_FILENO, &read_fds))
         {
-        send_message(server_fd, username);
-        check_error((bytes_received = recv(server_fd, message_buffer, MAXLEN - 1, 0)), SOCK_ERROR, "recv:failed to send message!");
+            send_message(server_fd, username);
+        }
     }
+
     close(server_fd);
 }
 
