@@ -9,59 +9,47 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <stdbool.h>
+#include <sys/epoll.h>
+
 #define SA struct sockaddr
 #define MAXLEN 4096
-
-// @warning: All functions work only with ipV4.
+#define BACKLOG 10
+#define SOCK_ERROR -1
+#define SA_IN struct sockaddr_in
+#define USERNAME_SIZE 26
+#define MAX_CLIENTS 10
+#define ONLINE true
+#define OFFLINE false
 
 /**
- * @include server.h
- *
- * @brief Creates a socket and returns the socket file descriptor. Does error handling.
- *
- * @param serverType - SOCK_STREAM(for TCP) or SOCK_DGRAM(for Datagram).
- *
- * @return An integer which is the socket file descriptor.
- * @note Ipv4 only.
+ * @brief The struct holding the client's information.
+ * @param clientFD - The client's File descriptor.
+ * @param userName - The username of the client.
+ * @param state - Either ONLINE or OFFLINE.
  */
-int getSocket(int serverType);
+typedef struct Client
+{
+    int client_fd;                //-> The client's File descriptor.
+    char username[USERNAME_SIZE]; //-> The username of the client.
+    bool state;                   //-> Either ONLINE or OFFLINE.
+} Client;
 
 /**
- * @brief Fills a sockaddr_in  struct and returns it.
- * @param port - The port the server runs on.
- * @return A sockaddr_in struct
+ * @brief Sets up the server socket and listens for connections.
+ * @param port - The port number the server will run on.
+ * @param sock_type - Either SOCK_STREAM (TCP server) or SOCK_DGRAM (UDP server).
+ * @param backlog- The number of clients the server can listen at a time.
+ * @return The server's file descriptor.
  */
-struct sockaddr_in get_sockaddr_in(int port);
+int setup_server(int port, int sock_type, int backlog);
 
 /**
- * @brief Binds address and listens for connections.
- *
- * @param serverFD - The socket file descriptor
- * @param serverAddr - A pointer to a sockaddr_in struct containing server address info.
- *
- * @note Make sure the sockaddr_in struct is filled.
+ * @brief Accepts new connections,stores their details and receives and broadcasts messages.
+ * @param serverFD - The file descriptor the server is listening on.
+ * @return void!
+ * @note FOR TCP SERVERS & FOR BROADCASTS.
  */
-void bind_and_listen(int *serverFD, struct sockaddr_in *serverAddr);
-
-/**
- * @brief Accepts incoming request and returns an accept file descriptor.
- *        Also prints out successful connections.
- * @param serverFD -  The socket file descriptor.
- * @param clientAddr - A pointer to a sockaddr_in struct to store client address.
- * @param clientAddrlen - A pointer to a socklen_t instance to store the client;s address length.
- *
- * @return Returns
- *
- * @note Should be called within a loop.
- */
-int acceptConnections(int serverFD, struct sockaddr_in *clientAddr, socklen_t *clientAddrlen);
-
-
-/**
- * @brief Receive data from a TCP server and sends it back to sender
- * @param clientFD - The client's file descriptor.
- * @return void.
-*/
-void receive_and_send(int clientFD,char* msgBuffer);
+void handle_connections(int serverFD);
 
 #endif

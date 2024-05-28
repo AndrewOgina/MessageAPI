@@ -1,31 +1,10 @@
 #include "../include/server.h"
 #define PORT 8088
-
+#define BACKLOG 10
 
 int main(int argc,char* argv[])
 {
-    int serverFD;
-    int clientFD;
-    char msgBuffer[MAXLEN];
-    struct sockaddr_in serverInfo;
-    struct sockaddr_in clientInfo;
-    socklen_t clientAddrlen;
-
-    serverFD = getSocket(SOCK_STREAM);
-    printf("%i serverFD\n",serverFD);
-    serverInfo = get_sockaddr_in(PORT);
-    bind_and_listen(&serverFD,&serverInfo);
-
-    while(1)
-    {
-        clientFD = acceptConnections(serverFD,&clientInfo,&clientAddrlen);
-        send(clientFD,"Hello",sizeof("Hello"),0);
-        
-        while(1)
-        {
-        receive_and_send(clientFD,msgBuffer);
-        }
-    }
-    close(serverFD);
-    close(clientFD);
+    int server_fd; //> The server's file descriptor.
+    server_fd = setup_server(PORT,SOCK_STREAM,BACKLOG);
+    handle_connections(server_fd); 
 }
