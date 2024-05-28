@@ -1,16 +1,17 @@
 #include "../include/client.h"
-#include <pthread.h>
 #define PORT 8088
 
-int main(int argc, char *argv[])
-{
-    if(argc != 3)
-    {
-        fprintf(stderr,"Provide the: 1.Server address!\n             2.Your username!\n");
-        exit(EXIT_FAILURE);
-    }
-    int server_fd = connect_to_server(PORT, argv[1],argv[2]);
+int main()
+{   
+    char* nl;
+    char local_ip[] = "127.0.0.1";
+    char username[USERNAME_SIZE];
+    printf("Username:");
+    fgets(username,USERNAME_SIZE,stdin);
 
-    join_broadcast(server_fd,argv[2]);
-    
+    //Removing the new line.
+    nl = strchr(username,'\n');
+    *nl = '\0';
+    int server_fd = connect_to_server(PORT,local_ip,username);
+    join_broadcast(server_fd,username);
 }
