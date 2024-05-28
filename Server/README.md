@@ -30,4 +30,3 @@ Clone the repository then you can compile it using the following make commands.<
 ``NOTE:`` If you are using a different compiler like Clang make sure to edit the makefile to fit your needs.
 1. `make APP` - Compiles the program.
 2. `make RUN` - To run the program.
-
